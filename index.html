@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <title>Dashboard Jadwal Visit Pasien</title>
     <style>
         * {
@@ -213,11 +214,12 @@
             background: linear-gradient(135deg, #4338ca, #6d28d9);
         }
 
-        .table th.sortable::after {
-            content: '↕️';
-            margin-left: 8px;
-            opacity: 0.7;
-        }
+       .table th.sortable::after {
+  content: '⇅'; /* Alternatif: '↑↓' atau '⇵' */
+  margin-left: 8px;
+  opacity: 0.7;
+  font-family: inherit;
+}
 
         .table th.sort-asc::after {
             content: '↑';
@@ -426,12 +428,17 @@
                     <label>📅 Filter Tanggal Visit</label>
                     <input type="date" id="filterTanggal">
                 </div>
+                                <div class="control-group">
+  <label>👨‍⚕️ Cari Nama Terapis</label>
+  <input type="text" id="searchTerapis" placeholder="Masukkan nama terapis...">
+</div>
                 <div class="control-group">
                     <label>&nbsp;</label>
                     <button class="btn btn-primary" onclick="searchData()">
                         🔍 Cari Data
                     </button>
                 </div>
+
             </div>
 
             <div class="control-row">
@@ -470,19 +477,44 @@
 
             <table class="table" id="dataTable" style="display: none;">
                 <thead>
-                    <tr>
-                        <th class="sortable" data-sort="tanggalPesan">📅 Tanggal Pesan</th>
-                        <th class="sortable" data-sort="kodeAntrian">🎫 Kode Antrian</th>
-                        <th class="sortable" data-sort="namaPasien">👤 Nama Pasien</th>
-                        <th>🔢 Jml Visit</th>
-                        <th>🏥 Layanan</th>
-                        <th>📍 Wilayah</th>
-                        <th>📊 Visit Ke</th>
-                        <th class="sortable" data-sort="tanggalVisit">📅 Tanggal Visit</th>
-                        <th>⏰ Jam Visit</th>
-                        <th>👨‍⚕️ Terapis</th>
-                        <th>⚙️ Aksi</th>
-                    </tr>
+<tr>
+  <th class="sortable" data-sort="tanggalPesan">
+    <i class="fa-solid fa-calendar-days"></i> Tanggal Pesan
+  </th>
+  <th class="sortable" data-sort="kodeAntrian">
+    <i class="fa-solid fa-ticket"></i> Kode Antrian
+  </th>
+  <th class="sortable" data-sort="namaPasien">
+    <i class="fa-solid fa-user"></i> Nama Pasien
+  </th>
+  <th>
+    <i class="fa-solid fa-hashtag"></i> Jml Visit
+  </th>
+  <th>
+    <i class="fa-solid fa-stethoscope"></i> Layanan
+  </th>
+  <th>
+    <i class="fa-solid fa-location-dot"></i> Wilayah
+  </th>
+  <th>
+    <i class="fa-solid fa-chart-bar"></i> Visit Ke
+  </th>
+  <th class="sortable" data-sort="tanggalVisit">
+    <i class="fa-solid fa-calendar-day"></i> Tanggal Visit
+  </th>
+  <th>
+    <i class="fa-solid fa-clock"></i> Jam Visit
+  </th>
+  <th>
+    <i class="fa-solid fa-user-doctor"></i> Terapis
+  </th>
+  <th>
+    <i class="fa-solid fa-thumbtack"></i> Status Terapis
+  </th>
+  <th>
+    <i class="fa-solid fa-gear"></i> Aksi
+  </th>
+</tr>
                 </thead>
                 <tbody id="tableBody">
                 </tbody>
@@ -491,7 +523,64 @@
             <div class="pagination" id="pagination"></div>
         </div>
     </div>
-
+<!-- Modal Tambah Visit Baru -->
+<div id="modalAddVisit" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close" onclick="closeModal('modalAddVisit')">&times;</span>
+      <h3>➕ Tambah Visit Baru</h3>
+    </div>
+    <div class="modal-body">
+      <div id="modalAlertAdd"></div>
+      <form id="formAddVisit">
+        <div class="form-group">
+          <label>📅 Tanggal Pemesanan</label>
+          <input type="date" id="tanggalPesanAdd" required>
+        </div>
+        <div class="form-group">
+          <label>🎫 Kode Antrian</label>
+          <input type="text" id="kodeAntrianAdd" required placeholder="Contoh: KA001">
+        </div>
+        <div class="form-group">
+          <label>👤 Nama Pasien</label>
+          <input type="text" id="namaPasienAdd" required placeholder="Nama lengkap pasien">
+        </div>
+        <div class="form-group">
+          <label>🔢 Jumlah Visit</label>
+          <input type="number" id="jumlahVisitAdd" required min="1" placeholder="Jumlah visit">
+        </div>
+        <div class="form-group">
+          <label>🏥 Layanan</label>
+          <select id="layananAdd" required>
+            <option value="">Pilih Layanan</option>
+            <option value="Fisioterapi">Fisioterapi</option>
+            <option value="Terapi Wicara">Terapi Wicara</option>
+            <option value="Terapi Okupasi">Terapi Okupasi</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>📍 Wilayah</label>
+          <select id="wilayahAdd" required>
+            <option value="">Pilih Wilayah</option>
+            <option value="Jakarta Pusat">Jakarta Pusat</option>
+            <option value="Jakarta Utara">Jakarta Utara</option>
+            <option value="Jakarta Selatan">Jakarta Selatan</option>
+            <option value="Jakarta Timur">Jakarta Timur</option>
+            <option value="Jakarta Barat">Jakarta Barat</option>
+            <option value="Bogor">Bogor</option>
+            <option value="Depok">Depok</option>
+            <option value="Tangerang">Tangerang</option>
+            <option value="Bekasi">Bekasi</option>
+          </select>
+        </div>
+        <div style="text-align: right; margin-top: 30px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalAddVisit')" style="margin-right: 10px;">Batal</button>
+          <button type="submit" class="btn btn-success">💾 Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
     <!-- Modal Form -->
     <div id="dataModal" class="modal">
         <div class="modal-content">
@@ -556,7 +645,9 @@
                     </div>
                     <div class="form-group">
                         <label>👨‍⚕️ Nama Terapis</label>
-                        <input type="text" id="namaTerapis" required placeholder="Nama terapis">
+                        <select id="namaTerapis" required>
+  <option value="">Pilih Terapis</option>
+</select>
                     </div>
                     <div style="text-align: right; margin-top: 30px;">
                         <button type="button" class="btn btn-secondary" onclick="closeModal()" style="margin-right: 10px;">Batal</button>
@@ -601,38 +692,35 @@
         }
 
         // Load data dari cache atau server
-        async function loadData() {
-            const now = Date.now();
-            if (cache.data && (now - cache.timestamp < CONFIG.CACHE_DURATION)) {
-                currentData = cache.data;
-                filteredData = [...currentData];
-                displayData();
-                updateStats();
-                return;
-            }
+function loadData() {
+    const now = Date.now();
 
-            showLoading(true);
-            try {
-                // Simulasi API call ke Google Apps Script
-                // const response = await fetch(GOOGLE_APPS_SCRIPT_URL + '?action=getData');
-                // const data = await response.json();
-                
-                // Dummy data untuk demo
-                currentData = generateDummyData();
-                
-                cache.data = currentData;
-                cache.timestamp = now;
-                
-                filteredData = [...currentData];
-                displayData();
-                updateStats();
-            } catch (error) {
-                console.error('Error loading data:', error);
-                showAlert('Error memuat data: ' + error.message, 'error');
-            } finally {
-                showLoading(false);
-            }
-        }
+    if (cache.data && (now - cache.timestamp < CONFIG.CACHE_DURATION)) {
+        currentData = cache.data;
+        filteredData = [...currentData];
+        displayData();
+        updateStats();
+        return;
+    }
+
+    showLoading(true);
+
+fetch('https://script.google.com/macros/s/AKfycbXXXXX/exec?action=getData')
+  .then(res => res.json())
+  .then(data => {
+    currentData = data;
+    cache.data = data;
+    cache.timestamp = Date.now();
+    filteredData = [...currentData];
+    displayData();
+    updateStats();
+    showLoading(false);
+  })
+  .catch(error => {
+    console.error('Gagal memuat data:', error);
+    showAlert('Gagal memuat data dari server!', 'error');
+    showLoading(false);
+  });
 
         // Generate dummy data untuk demo
         function generateDummyData() {
@@ -666,29 +754,32 @@
         // Pencarian data dengan debounce
         const debouncedSearch = debounce(searchData, CONFIG.DEBOUNCE_DELAY);
 
-        function searchData() {
-            const searchNama = document.getElementById('searchNama').value.toLowerCase();
-            const searchKode = document.getElementById('searchKode').value.toLowerCase();
-            const filterTanggal = document.getElementById('filterTanggal').value;
+function searchData() {
+    const searchNama = document.getElementById('searchNama').value.toLowerCase();
+    const searchKode = document.getElementById('searchKode').value.toLowerCase();
+    const searchTerapis = document.getElementById('searchTerapis').value.toLowerCase();
+    const filterTanggal = document.getElementById('filterTanggal').value;
 
-            filteredData = currentData.filter(row => {
-                const matchNama = !searchNama || row.namaPasien.toLowerCase().includes(searchNama);
-                const matchKode = !searchKode || row.kodeAntrian.toLowerCase().includes(searchKode);
-                const matchTanggal = !filterTanggal || row.tanggalVisit === filterTanggal;
-                
-                return matchNama && matchKode && matchTanggal;
-            });
+    filteredData = currentData.filter(row => {
+        const matchNama = !searchNama || row.namaPasien.toLowerCase().includes(searchNama);
+        const matchKode = !searchKode || row.kodeAntrian.toLowerCase().includes(searchKode);
+        const matchTerapis = !searchTerapis || row.namaTerapis.toLowerCase().includes(searchTerapis);
+        const matchTanggal = !filterTanggal || row.tanggalVisit === filterTanggal;
+        
+        return matchNama && matchKode && matchTerapis && matchTanggal;
+    });
 
-            currentPage = 1;
-            displayData();
-            updateStats();
-        }
+    currentPage = 1;
+    displayData();
+    updateStats();
+}
 
         // Clear filters
         function clearFilters() {
             document.getElementById('searchNama').value = '';
             document.getElementById('searchKode').value = '';
             document.getElementById('filterTanggal').value = '';
+            document.getElementById('searchTerapis').value = '';
             
             filteredData = [...currentData];
             currentPage = 1;
@@ -757,6 +848,7 @@
                     <td><strong>${formatDate(row.tanggalVisit)}</strong></td>
                     <td>${row.jamVisit}</td>
                     <td>${row.namaTerapis}</td>
+                    <td>${row.statusTerapis || '-'}</td>
                     <td>
                         <button class="btn btn-warning btn-sm" onclick="editData(${startIndex + index})" title="Edit">
                             ✏️
@@ -945,36 +1037,23 @@ function openModal(mode, index = -1) {
                 const data = filteredData[index];
                 
                 // Simulasi API call untuk delete
-                // const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-                //     method: 'POST',
-                //     body: JSON.stringify({
-                //         action: 'delete',
-                //         kodeAntrian: data.kodeAntrian
-                //     })
-                // });
+fetch('https://script.google.com/macros/s/AKfycbxHOUX_yoOIt5T5DUBamhOewZVBv5cUH4YldmLRPoIwbKFoj8s3QE2Yr4N9syyXWfuq8A/exec?action=remove', {
+  method: 'POST',
+  body: JSON.stringify({ kodeAntrian: data.kodeAntrian }),
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+.then(res => res.json())
+.then(() => {
+  alert('Data berhasil dihapus');
+  loadData();
+})
+.catch(err => {
+  console.error(err);
+  alert('Gagal menghapus data');
+});
 
-                // Remove from current data
-                const originalIndex = currentData.findIndex(item => item.kodeAntrian === data.kodeAntrian);
-                if (originalIndex > -1) {
-                    currentData.splice(originalIndex, 1);
-                }
-                
-                // Remove from filtered data
-                filteredData.splice(index, 1);
-                
-                // Update cache
-                cache.data = currentData;
-                cache.timestamp = Date.now();
-                
-                displayData();
-                updateStats();
-                showAlert('Data berhasil dihapus!', 'success');
-                
-            } catch (error) {
-                console.error('Error deleting data:', error);
-                showAlert('Error menghapus data: ' + error.message, 'error');
-            }
-        }
 
         // Form submission
         document.getElementById('dataForm').addEventListener('submit', async function(e) {
@@ -1036,13 +1115,44 @@ function openModal(mode, index = -1) {
                 cache.timestamp = Date.now();
 
                 // Simulasi API call
-                // const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-                //     method: 'POST',
-                //     body: JSON.stringify({
-                //         action: editingRowIndex >= 0 ? 'update' : 'create',
-                //         data: formData
-                //     })
-                // });
+if (editingRowIndex >= 0) {
+fetch('https://script.google.com/macros/s/AKfycbxHOUX_yoOIt5T5DUBamhOewZVBv5cUH4YldmLRPoIwbKFoj8s3QE2Yr4N9syyXWfuq8A/exec?action=update', {
+  method: 'POST',
+  body: JSON.stringify(formData),
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+.then(res => res.json())
+.then(() => {
+  alert('Data berhasil diupdate');
+  loadData();
+})
+.catch(err => {
+  console.error(err);
+  alert('Gagal mengupdate data');
+});
+
+    .update(formData); // memanggil fungsi update di Code.gs
+} else {
+fetch('https://script.google.com/macros/s/AKfycbxHOUX_yoOIt5T5DUBamhOewZVBv5cUH4YldmLRPoIwbKFoj8s3QE2Yr4N9syyXWfuq8A/exec?action=create', {
+  method: 'POST',
+  body: JSON.stringify(formData),
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+.then(res => res.json())
+.then(() => {
+  alert('Data berhasil ditambahkan');
+  loadData();
+})
+.catch(err => {
+  console.error(err);
+  alert('Gagal menambahkan data');
+});
+    .create(formData); // memanggil fungsi create di Code.gs
+}
 
                 displayData();
                 updateStats();
@@ -1074,11 +1184,13 @@ function openModal(mode, index = -1) {
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
             loadData();
+            loadTerapisDropdown();
             
             // Search event listeners dengan debounce
             document.getElementById('searchNama').addEventListener('input', debouncedSearch);
             document.getElementById('searchKode').addEventListener('input', debouncedSearch);
             document.getElementById('filterTanggal').addEventListener('change', searchData);
+            document.getElementById('searchTerapis').addEventListener('input', debouncedSearch);
             
             // Sort event listeners
             document.querySelectorAll('.table th.sortable').forEach(th => {
@@ -1139,6 +1251,21 @@ function openModal(mode, index = -1) {
         // Initialize
         window.addEventListener('resize', handleTableScroll);
         setTimeout(handleTableScroll, 100);
+
+       // List Nama Terapis di Modal Dropdown
+        function loadTerapisDropdown() {
+fetch('https://script.google.com/macros/s/AKfycbxHOUX_yoOIt5T5DUBamhOewZVBv5cUH4YldmLRPoIwbKFoj8s3QE2Yr4N9syyXWfuq8A/exec?action=getTerapis')
+  .then(res => res.json())
+  .then(data => {
+    const select = document.getElementById('namaTerapis');
+    data.forEach(nama => {
+      const option = document.createElement('option');
+      option.value = nama;
+      option.textContent = nama;
+      select.appendChild(option);
+    });
+  });
+
     </script>
 </body>
 </html>
