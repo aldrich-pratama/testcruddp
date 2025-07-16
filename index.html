@@ -1,31 +1,188 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Back Office Dashboard</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard CRUD Back Office</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
 
-    <!-- Favicon -->
-    <link rel="icon" href="/favicon.ico" />
+    <!-- Sidebar -->
+    <div class="flex flex-row">
+        <aside class="w-64 bg-white border-r border-gray-200">
+            <div class="p-6">
+                <h2 class="text-2xl font-semibold text-center">Dashboard</h2>
+                <nav class="mt-4">
+                    <ul>
+                        <li><a href="#dataProfilPasien" class="block py-2 px-4 hover:bg-gray-100">Data Profil Pasien</a></li>
+                        <li><a href="#dataReservasi" class="block py-2 px-4 hover:bg-gray-100">Data Reservasi</a></li>
+                        <li><a href="#profilFisioterapis" class="block py-2 px-4 hover:bg-gray-100">Profil Fisioterapis</a></li>
+                        <li><a href="#pembayaran" class="block py-2 px-4 hover:bg-gray-100">Pembayaran</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
 
-    <!-- Google Fonts (optional) -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-      rel="stylesheet"
-    />
+        <main class="flex-grow p-6">
+            <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+            <!-- Authentication Login -->
+            <div class="mb-8" id="login">
+                <h2 class="text-2xl font-semibold">Login</h2>
+                <form class="mt-4 bg-white p-6 rounded-md shadow-md">
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium">Email</label>
+                        <input type="email" id="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="block text-sm font-medium">Password</label>
+                        <input type="password" id="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md">Login</button>
+                </form>
+            </div>
 
-    <!-- Any other external libraries or assets -->
+            <!-- Data Profil Pasien -->
+            <div id="dataProfilPasien" class="mb-8">
+                <h2 class="text-2xl font-semibold">Data Profil Pasien</h2>
+                <table class="min-w-full bg-white border border-gray-200">
+                    <thead>
+                        <tr>
+                            <th class="py-3 px-4 border-b">Nama</th>
+                            <th class="py-3 px-4 border-b">Nomor Handphone</th>
+                            <th class="py-3 px-4 border-b">Email</th>
+                            <th class="py-3 px-4 border-b">Keluhan</th>
+                            <th class="py-3 px-4 border-b">Alamat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="py-2 px-4 border-b">John Doe</td>
+                            <td class="py-2 px-4 border-b">08123456789</td>
+                            <td class="py-2 px-4 border-b">john@example.com</td>
+                            <td class="py-2 px-4 border-b">Sakit Kepala</td>
+                            <td class="py-2 px-4 border-b">Jl. ABC No. 1, Kel. DEF, Kec. GHI, Kota JKL, Prov. MNO</td>
+                        </tr>
+                        <!-- Tambahkan data pasien lainnya -->
+                    </tbody>
+                </table>
+            </div>
 
-  </head>
-  <body class="bg-gray-100 font-roboto">
-    <div id="root"></div>
+            <!-- Data Reservasi -->
+            <div id="dataReservasi" class="mb-8">
+                <h2 class="text-2xl font-semibold">Data Reservasi</h2>
+                <table class="min-w-full bg-white border border-gray-200">
+                    <thead>
+                        <tr>
+                            <th class="py-3 px-4 border-b">Tanggal Pemesanan</th>
+                            <th class="py-3 px-4 border-b">Kode Antrian</th>
+                            <th class="py-3 px-4 border-b">Nama Pasien</th>
+                            <th class="py-3 px-4 border-b">Wilayah</th>
+                            <th class="py-3 px-4 border-b">Layanan</th>
+                            <th class="py-3 px-4 border-b">Jumlah Visit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="py-2 px-4 border-b">2025-07-15</td>
+                            <td class="py-2 px-4 border-b"><a href="#detailReservasi" class="text-blue-600">123456</a></td>
+                            <td class="py-2 px-4 border-b">John Doe</td>
+                            <td class="py-2 px-4 border-b">Jakarta</td>
+                            <td class="py-2 px-4 border-b">Fisioterapi</td>
+                            <td class="py-2 px-4 border-b">2</td>
+                        </tr>
+                        <!-- Tambahkan data reservasi lainnya -->
+                    </tbody>
+                </table>
+            </div>
 
-    <!-- React App JavaScript -->
-    <script src="/static/js/main.js"></script>
+            <!-- Detail Reservasi -->
+            <div id="detailReservasi" class="mb-8">
+                <h2 class="text-2xl font-semibold">Detail Reservasi</h2>
+                <table class="min-w-full bg-white border border-gray-200">
+                    <tr>
+                        <td class="py-2 px-4 border-b">Tanggal Visit:</td>
+                        <td class="py-2 px-4 border-b">2025-07-20</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Jam Visit:</td>
+                        <td class="py-2 px-4 border-b">10:00 WIB</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Nama Fisioterapis:</td>
+                        <td class="py-2 px-4 border-b">Jane Smith</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Jenis Terapis:</td>
+                        <td class="py-2 px-4 border-b">Karpis</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Status Visit:</td>
+                        <td class="py-2 px-4 border-b">Menunggu Konfirmasi Pasien</td>
+                    </tr>
+                </table>
+            </div>
 
-  </body>
+            <!-- Profil Fisioterapis -->
+            <div id="profilFisioterapis" class="mb-8">
+                <h2 class="text-2xl font-semibold">Profil Fisioterapis</h2>
+                <table class="min-w-full bg-white border border-gray-200">
+                    <thead>
+                        <tr>
+                            <th class="py-3 px-4 border-b">Nama Fisioterapis</th>
+                            <th class="py-3 px-4 border-b">ID Terapis</th>
+                            <th class="py-3 px-4 border-b">Jenis Terapis</th>
+                            <th class="py-3 px-4 border-b">Wilayah Jangkauan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="py-2 px-4 border-b">Jane Smith</td>
+                            <td class="py-2 px-4 border-b">T12345</td>
+                            <td class="py-2 px-4 border-b">Mitra</td>
+                            <td class="py-2 px-4 border-b">Jakarta</td>
+                        </tr>
+                        <!-- Tambahkan data fisioterapis lainnya -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pembayaran -->
+            <div id="pembayaran" class="mb-8">
+                <h2 class="text-2xl font-semibold">Pembayaran</h2>
+                <table class="min-w-full bg-white border border-gray-200">
+                    <thead>
+                        <tr>
+                            <th class="py-3 px-4 border-b">Nomor Invoice</th>
+                            <th class="py-3 px-4 border-b">Nama Pasien</th>
+                            <th class="py-3 px-4 border-b">Jumlah Visit</th>
+                            <th class="py-3 px-4 border-b">Jenis Paket</th>
+                            <th class="py-3 px-4 border-b">Harga Satuan</th>
+                            <th class="py-3 px-4 border-b">Status Pembayaran</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="py-2 px-4 border-b">INV-2025-001</td>
+                            <td class="py-2 px-4 border-b">John Doe</td>
+                            <td class="py-2 px-4 border-b">2</td>
+                            <td class="py-2 px-4 border-b">Paket A</td>
+                            <td class="py-2 px-4 border-b">Rp 200.000</td>
+                            <td class="py-2 px-4 border-b">Menunggu Pembayaran</td>
+                        </tr>
+                        <!-- Tambahkan data pembayaran lainnya -->
+                    </tbody>
+                </table>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium">Upload Bukti Pembayaran</label>
+                    <input type="file" class="mt-1 block w-full">
+                </div>
+                <button class="mt-4 bg-green-600 text-white py-2 px-4 rounded-md">Generate Invoice PDF</button>
+            </div>
+
+        </main>
+    </div>
+
+</body>
 </html>
